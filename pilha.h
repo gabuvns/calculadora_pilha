@@ -18,21 +18,26 @@ Prof. Dr. Marcos Caetano
 @see https://github.com/gabuvns
 */
 
-#ifndef __LISTA_H__
-#define __LISTA_H__
+#ifndef __PILHA_H__
+#define __PILHA_H__
 
 /**
 @brief Definições de uma calculadora-validadora de expressões, através do uso de pilhas.
 */
 
+/*Aqui se encontram as defnições das structs utilizadas.*/
 typedef struct elemento{
-    char simb;
-    int num;
+    char digitado; 
     struct elemento* proximo;
-}s_elemento
+}s_elemento;
 
 typedef struct pilha{
-    int quantidade;
-
+    int quantidade; 
+    struct elemento* inicio;
 }s_pilha;
-#endif 
+
+s_pilha* cria_pilha();
+s_elemento* cria_elemento(char digitado);
+
+
+#endif
