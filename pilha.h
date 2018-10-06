@@ -27,7 +27,7 @@ Prof. Dr. Marcos Caetano
 
 /*Aqui se encontram as defnições das structs utilizadas.*/
 typedef struct elemento{
-    char digitado; 
+    char caractere; 
     struct elemento* proximo;
 }s_elemento;
 
@@ -36,8 +36,17 @@ typedef struct pilha{
     struct elemento* inicio;
 }s_pilha;
 
-s_pilha* cria_pilha();
-s_elemento* cria_elemento(char digitado);
 
+s_elemento* cria_elemento(char input);
+
+/*Operações com a pilha*/
+
+s_pilha* cria_pilha();
+int pilha_vazia(s_pilha* pilha);
+void limpar_pilha(s_pilha* pilha);
+void get(s_pilha* pilha);
+void pop(s_pilha* pilha);
+void push(s_pilha* pilha, char input);
+void mostrar_pilha(s_pilha* pilha);
 
 #endif

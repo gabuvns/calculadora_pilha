@@ -4,13 +4,15 @@
 
 /*Verificação se alocacção está fucionando como deveria*/
 int main(){
+    s_pilha* pilha = cria_pilha();
+    push(pilha, 'a');
+    pop(pilha);
+    push(pilha, 'b');
+    push(pilha, 'c');
+    push(pilha, 'd');
+    mostrar_pilha(pilha);
+    get(pilha);
+    limpar_pilha(pilha);
 
-    char digitado;
-    s_pilha* pilha= cria_pilha();
-    scanf(" %c", &digitado);
-    s_elemento* elemento = cria_elemento(digitado);
-    printf("%c", elemento->digitado);
-    free(elemento);
-    free(pilha);
     return 0;
 }
