@@ -34,6 +34,7 @@ typedef struct elemento{
 typedef struct pilha{
     int quantidade; 
     struct elemento* inicio;
+    struct elemento* topo;
 }s_pilha;
 
 

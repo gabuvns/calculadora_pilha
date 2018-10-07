@@ -6,6 +6,7 @@ s_pilha* cria_pilha(){
     s_pilha* ptr = (s_pilha*) malloc(sizeof(s_pilha));
     ptr->quantidade = 0;
     ptr->inicio = NULL; 
+    ptr->topo = NULL;
     return ptr;
 }
 
@@ -26,6 +27,7 @@ void pop(s_pilha* pilha){
     else if(pilha->quantidade == 1){
         free(pilha->inicio);
         pilha->inicio = NULL;
+        pilha->topo = NULL;
         pilha->quantidade--;
     }
 
@@ -41,6 +43,7 @@ void pop(s_pilha* pilha){
 
         free(elem_atual);
         elem_ant->proximo = NULL;
+        pilha->topo = elem_ant;
         pilha->quantidade--;
     }
 }
@@ -59,7 +62,7 @@ void push(s_pilha* pilha, char input){
         }
 
         elem_aux->proximo = cria_elemento(input);
-        
+        pilha->topo = elem_aux->proximo;
     }
     pilha->quantidade++;
 
@@ -95,7 +98,6 @@ void limpar_pilha(s_pilha* pilha){
         pop(pilha);
     }
     if(pilha_vazia(pilha)){
-        printf("Pilha esvaziada com sucesso!\n");
         free(pilha);
     }
 }
@@ -110,14 +112,15 @@ void mostrar_pilha(s_pilha* pilha){
         s_elemento* elem_aux = pilha->inicio;
         int i;
         i = pilha->quantidade + 1;
+        printf("==========Pilha==========\n");
         while(elem_aux != NULL){ 
             i--;
             printf("%d. %c\n", i, elem_aux->caractere);
             elem_aux = elem_aux->proximo;
         }
+        printf("=====Fim da Pilha========\n\n\n\n");
         free(elem_aux);
     }
-    
 }
 
 
