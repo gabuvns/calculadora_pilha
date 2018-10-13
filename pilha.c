@@ -1,6 +1,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "pilha.h"
+
+/*Utilizado para limpar o terminal dependendo do sistema*/
+#ifdef _WIN32
+    #define CLEAR system("cls")
+#else
+    #define CLEAR system("clear")
+#endif
+
 /*Definição da função para criar pilha e elemento*/
 s_pilha* cria_pilha(){
     s_pilha* ptr = (s_pilha*) malloc(sizeof(s_pilha));
@@ -79,16 +87,16 @@ int pilha_vazia(s_pilha* pilha){
 }
 
 /*Função que printa somente o último elemento da pilha*/
-void get(s_pilha* pilha){
+char get(s_pilha* pilha){
     if(pilha_vazia(pilha)){
         printf("A pilha encontra-se vazia!\n");
     }
     else{
-        s_elemento* elem_aux = pilha->inicio;
-        while(elem_aux->proximo != NULL){
-            elem_aux = elem_aux->proximo;
+        s_elemento* elem_aux2 = pilha->inicio;
+        while(elem_aux2->proximo != NULL){
+            elem_aux2 = elem_aux2->proximo;
         }
-    printf("Elemento número %d no topo da lista: %c\n", pilha->quantidade, elem_aux->caractere);
+        return elem_aux2->caractere;
 
     }
 }
@@ -118,8 +126,248 @@ void mostrar_pilha(s_pilha* pilha){
             printf("%d. %c\n", i, elem_aux->caractere);
             elem_aux = elem_aux->proximo;
         }
-        printf("=====Fim da Pilha========\n\n\n\n");
+        printf("======Fim da Pilha=======\n\n\n\n");
         free(elem_aux);
+    }
+}
+
+/*Funcoes relativas a calculadora*/
+
+/*Verificacao da validade da expressao, 1 = valida, 0 = Invalida.*/
+int validade(s_pilha* demarcacao, s_pilha* pilha_aux){
+    char entrada;
+    int val = 1;
+    
+    while(scanf(" %c", &entrada) != '#'){
+        push(pilha_aux, entrada);
+
+        if(entrada == '#'){
+            return val;
+        }
+         if(entrada == '('){
+            push(demarcacao, entrada);  
+            if(!pilha_vazia(demarcacao)){
+                val = 0;
+            }
+        }
+
+        else if(entrada == ')'){
+            if(pilha_vazia(demarcacao)){
+                return 0;
+            }
+            else{
+                if(demarcacao->quantidade == 1){
+                    if(demarcacao->inicio->caractere == ('(')){
+                        val = 1;
+                        pop(demarcacao);
+                    }
+                    else{
+                        return 0;
+                    }
+                }
+                else{
+                    pop(demarcacao);
+                }
+            }
+        }
+    }
+}
+
+/*Define-se as prioridades relativas a pilha na funcao de conversao*/
+/*Retorna 1 caso o elemento da pilha tenha maior prioridade e 2 caso contrario*/
+int prioridade(s_pilha* anda, char caractere){
+    int elem1;
+    int elem2;
+    char comp = get(anda);
+    /*Prioridade elemento 1*/
+    if(comp == '-' || comp == '+'){
+        elem1 = 1;
+    }
+    else if(comp == '/' || comp == '*'){
+        elem1 = 2;
+    }
+
+    /*prioridade elemento 2*/
+    if(caractere == '-' || caractere == '+'){
+        elem2 = 1;
+    }
+
+    else if(caractere == '/' || caractere == '*'){
+        elem2 = 2;
+    }
+    printf("caractere comparado1 = %c\n", comp);
+    printf("caractere comparado2 = %c\n", caractere);
+    mostrar_pilha(anda);
+
+    if(elem1 > elem2 || elem1 == elem2){
+        printf("elem1= %d\n", elem1);
+        printf("elem2= %d\n", elem2);
+        printf("\n===1\n\n\n");        
+        return 1;
+    }
+    if(elem1 < elem2){
+        printf("elem1= %d\n", elem1);
+        printf("elem2= %d\n", elem2);
+        printf("\n===2\n\n\n");        
+        return 2;
+    }
+}
+
+
+void inftopos(s_pilha* pilha_aux){
+    s_elemento* elem_aux;
+    s_pilha* anda = cria_pilha();
+    elem_aux = pilha_aux->inicio;
+    char saida[50];
+    int i;
+    i=0;
+    int priori;
+    while(elem_aux->caractere != '#'){
+        if(elem_aux->caractere == '('){
+            push(anda, elem_aux->caractere);
+        }
+        
+        else if(elem_aux->caractere == ')'){
+            while(get(anda) != '('){
+                saida[i] = get(anda);
+                pop(anda);
+                i++;
+            }
+            pop(anda);
+        }
+        
+        else if(elem_aux->caractere == '*' || elem_aux->caractere == '+' ||
+        elem_aux->caractere == '-' || elem_aux->caractere == '/') {
+            if(!pilha_vazia(anda)){
+                priori = prioridade(anda, elem_aux->caractere);
+                if(priori == 1 || priori == 3){
+                    saida[i] = get(anda);
+                    pop(anda);
+                    push(anda, elem_aux->caractere);                   
+                    i++;
+                }
+
+                else if(priori == 2){
+                    push(anda, elem_aux->caractere);                   
+        
+                } 
+            }
+            else{
+                push(anda, elem_aux->caractere);
+            }
+        }
+
+        /*No caso de numeros*/
+        else{
+            saida[i] = elem_aux->caractere;
+            i++; 
+        }
+        elem_aux = elem_aux->proximo;
+    }
+    while(!pilha_vazia(anda)){
+        mostrar_pilha(anda);
+        saida[i] = get(anda);
+        pop(anda);
+        i++;
+    }
+
+    saida[i] = '\0';
+    printf("saida = %s\n", saida);
+    int ap;
+    scanf("%d", &ap);
+    
+}
+
+/*Modo de resolucao*/
+void resmode(){
+    CLEAR;
+    char con;
+    s_pilha* demarcacao = cria_pilha();
+    s_pilha* pilha_aux = cria_pilha();
+    printf("Digite a seguir sua equacao: ");
+
+    if(!validade(demarcacao, pilha_aux)){
+        printf("Expressao invalida.\n");
+        limpar_pilha(demarcacao);
+        limpar_pilha(pilha_aux);
+        do{
+            printf("Digite 'r'  para retornar ao menu.\n");
+            scanf(" %c", &con);
+        }while(con != 'R' && con != 'r');
+        
+    }
+    else{
+        printf("Expressao valida!\n");
+        limpar_pilha(demarcacao);
+        do{
+            printf("Digite 'r' para a proxima etapa.\n");
+            scanf(" %c", &con);
+        }while(con != 'R' && con != 'r');
+        inftopos(pilha_aux);
+    }
+    
+    CLEAR;
+
+}
+
+/*Modo de calculadora*/
+void calcmode(){
+
+}
+
+/*Funcao para printar o menu*/
+void show_menu(){
+        printf("Utilize um '#' para indicar o fim de sua expressao!\n");
+        printf("Selecione qual dos modos deseja utilizar\n");
+        printf("1. Resolucao de Expressao\n");
+        printf("2. Calculadora\n");
+        printf("3. Como utilizar\n");
+        printf("4. Sair\n");
+        
+
+}
+void tutorial(){
+    CLEAR;
+    char con;
+    printf("1. Selecione um modo de operacao\n");
+    printf("2. Sempre que inserir uma equação, utilize um '#' para indicar seu fim\n");
+    printf("Como por exemplo na expressao a seguir\n");
+    printf("Expressao valida: (A+B)*C/D-F#\n");
+    printf("Expressao invaldia: (A+B)*C/D-F\n");
+    printf("Caso esqueca de por a '#' apos a expressao, digita-la normalmente.\n");
+   
+    do{
+        printf("Digite 'r' para retornar ao menu.\n");
+        scanf(" %c", &con);
+    }while(con != 'R' && con != 'r');
+    CLEAR;
+}
+
+/*Definicoes do menu*/
+void menu(){   
+    char input = '5';
+
+    while(input != '4'){   
+        show_menu();   
+        printf("Selecione uma opcao: ");
+        scanf(" %c", &input);
+
+        if(input == '1' || input == '2' || input == '3'){
+            switch(input){
+            case '1': resmode();
+                break;
+            case '2': calcmode();
+                break;
+            
+            case '3': tutorial();
+                break;
+            }
+        }
+
+        else if(input != '4'){
+            CLEAR;
+            printf("Por favor, digite uma opcao valida.\n");
+        } 
     }
 }
 
