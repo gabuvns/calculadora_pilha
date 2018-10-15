@@ -180,7 +180,10 @@ int prioridade(s_pilha* anda, char caractere){
     int elem2;
     char comp = get(anda);
     /*Prioridade elemento 1*/
-    if(comp == '-' || comp == '+'){
+    if(comp == '('){
+        elem1 = 3;
+    }
+    else if(comp == '-' || comp == '+'){
         elem1 = 1;
     }
     else if(comp == '/' || comp == '*'){
@@ -188,27 +191,32 @@ int prioridade(s_pilha* anda, char caractere){
     }
 
     /*prioridade elemento 2*/
-    if(caractere == '-' || caractere == '+'){
+    if(caractere == '('){
+        elem2 = 3;
+    }
+    else if(caractere == '-' || caractere == '+'){
         elem2 = 1;
     }
 
     else if(caractere == '/' || caractere == '*'){
         elem2 = 2;
     }
-    printf("caractere comparado1 = %c\n", comp);
-    printf("caractere comparado2 = %c\n", caractere);
-    mostrar_pilha(anda);
 
-    if(elem1 > elem2 || elem1 == elem2){
-        printf("elem1= %d\n", elem1);
-        printf("elem2= %d\n", elem2);
-        printf("\n===1\n\n\n");        
+    if(comp == '('){
+        return 4;    
+    }
+
+    if(elem2 == '('){
+        return 3;
+    }
+    
+
+    else if(elem1 > elem2 || elem1 == elem2){
+      
         return 1;
     }
-    if(elem1 < elem2){
-        printf("elem1= %d\n", elem1);
-        printf("elem2= %d\n", elem2);
-        printf("\n===2\n\n\n");        
+    else if(elem1 < elem2){
+       
         return 2;
     }
 }
@@ -219,16 +227,13 @@ void inftopos(s_pilha* pilha_aux){
     s_pilha* anda = cria_pilha();
     elem_aux = pilha_aux->inicio;
     char saida[50];
-    int i;
+    int i, j;
     i=0;
+    int qtd = 0;
     int priori;
     while(elem_aux->caractere != '#'){
-        if(elem_aux->caractere == '('){
-            push(anda, elem_aux->caractere);
-        }
-        
-        else if(elem_aux->caractere == ')'){
-            while(get(anda) != '('){
+        if(elem_aux->caractere == ')'){
+            for(j=0;j<qtd;j++){
                 saida[i] = get(anda);
                 pop(anda);
                 i++;
@@ -237,27 +242,34 @@ void inftopos(s_pilha* pilha_aux){
         }
         
         else if(elem_aux->caractere == '*' || elem_aux->caractere == '+' ||
-        elem_aux->caractere == '-' || elem_aux->caractere == '/') {
+        elem_aux->caractere == '-' || elem_aux->caractere == '/' ||
+        elem_aux->caractere == '('){
             if(!pilha_vazia(anda)){
                 priori = prioridade(anda, elem_aux->caractere);
-                if(priori == 1 || priori == 3){
+                 if(priori == 1){
                     saida[i] = get(anda);
                     pop(anda);
                     push(anda, elem_aux->caractere);                   
                     i++;
                 }
+                else if(priori == 4){
+                    push(anda, elem_aux->caractere);
+                    qtd++;
+                }
+                else if(priori == 3){
+                    push(anda, elem_aux->caractere);
+                }
 
                 else if(priori == 2){
                     push(anda, elem_aux->caractere);                   
-        
                 } 
             }
             else{
                 push(anda, elem_aux->caractere);
             }
         }
-
-        /*No caso de numeros*/
+        
+        /*No caso de 'numeros'*/
         else{
             saida[i] = elem_aux->caractere;
             i++; 
@@ -265,14 +277,13 @@ void inftopos(s_pilha* pilha_aux){
         elem_aux = elem_aux->proximo;
     }
     while(!pilha_vazia(anda)){
-        mostrar_pilha(anda);
         saida[i] = get(anda);
         pop(anda);
         i++;
     }
 
     saida[i] = '\0';
-    printf("saida = %s\n", saida);
+    printf("Expressao pos-fixa = %s\n", saida);
     int ap;
     scanf("%d", &ap);
     
