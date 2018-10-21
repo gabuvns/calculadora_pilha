@@ -26,23 +26,33 @@ Prof. Dr. Marcos Caetano
 */
 
 /*Aqui se encontram as defnições das structs utilizadas.*/
+
 typedef struct elemento{
     char caractere;
-    float num;
     struct elemento* proximo;
 }s_elemento;
 
-typedef struct pilha{
+typedef struct numerical{
+    float numero;
+    struct  numerical* proximo;
+}s_numerical;
+
+typedef struct {
     int quantidade; 
     struct elemento* inicio;
     struct elemento* topo;
-}s_pilha;
+}s_pilha; 
+
+typedef struct numerical_pilha{
+    int quantidade; 
+    struct numerical* inicio;
+    struct numerical* topo;
+}n_pilha;
 
 
 s_elemento* cria_elemento(char input);
 
-/*Operações com a pilha*/
-
+/*Operações com a pilha de char*/
 s_pilha* cria_pilha();
 int pilha_vazia(s_pilha* pilha);
 void limpar_pilha(s_pilha* pilha);
@@ -50,5 +60,10 @@ char get(s_pilha* pilha);
 void pop(s_pilha* pilha);
 void push(s_pilha* pilha, char input);
 void mostrar_pilha(s_pilha* pilha);
+
+/*Operacoes com a pilha de floats*/
+n_pilha* cria_pilhanumerica();
+s_numerical* cria_elementonumerico(float input);
+void push_num(n_pilha* numerical, float input);
 
 #endif
