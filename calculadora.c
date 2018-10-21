@@ -431,19 +431,57 @@ void resmode(){
 /*Fim das definicoes referentes ao modo de resolucao*/
 
 /*Configuracoes referentes ao modo calculadora*/
-/*void calculadora(){
-    s_pilha* calculadora = cria_pilha();
-    int i;
+void calcmode(){
+    n_pilha* calculadora = cria_pilhanumerica();
+    char entrada[200];
+    char k;
+    double db, elem1, elem2, elem3;
+    CLEAR;
+
+    printf("Bem vindo, caso deseje sair, basta digitar 's'\n");
+
+    while(entrada[0] != 's'  && entrada[0] != 'S'){
+        mostrar_pilha_num(calculadora);
+        scanf("%s", entrada);
+
+        if(ehnumero(entrada[0])){
+            db = chpdb(entrada);
+            push_num(calculadora, db);
+        }
+
+        else if(ehoperando(entrada[0])){
+            if(calculadora->quantidade == 1){
+                printf("==Quantidade de operandos insuficientes!==\n");
+                do{
+                printf("Digite 'r'  para continuar.\n");
+                scanf(" %c", &k);
+                }while(k != 'R' && k != 'r');
+            }
+            else{
+                elem1 = getnum(calculadora);
+                n_pop(calculadora);
+                elem2 = getnum(calculadora);
+                n_pop(calculadora);
+                elem3 = operacao(elem1, elem2, entrada[0]);
+                push_num(calculadora, elem3);
+            }
+        }
+
+        CLEAR;
+    }
+    limpar_pilha_num(calculadora);
+    CLEAR;
 }
-*/
+
 /*Configuracoes referentes ao menu*/
 void tutorial(){
     CLEAR;
     char x;
-    printf("Basta selecionar um modo digitando a opcao desejada.\n");
-    printf("No modo de Resolucao de Expressao, eh necessaria ");
+    printf("Basta selecionar um modo digitando a opcao desejada.\n\n");
+    printf("1) No modo de Resolucao de Expressao, eh necessaria ");
     printf("a adicao de '.00' caso seja um numero inteiro, como a seguir:\n");
-    printf("(60.00 + 35.5234)* 45.00 - 35.00\n");
+    printf("(60.00 + 35.5234)* 45.00 - 35.00\n\n");
+    printf("2) No modo calculadora, basta digitar 's' para sair.\n\n");
     printf("Para mais informacoes consulte o readme\n");
     printf("Pressione qualquer tecla para retornar ao menu.\n");
     do{
@@ -474,8 +512,8 @@ void menu(){
             switch(input){
             case '1': resmode();
                 break;
-           /* case '2': calcmode();
-                break;*/
+            case '2': calcmode();
+                break;
             case '3': tutorial();
                 break;
             }
