@@ -237,8 +237,6 @@ void inftopos(s_pilha* pilha_aux){
                 saida[i] = get(anda);
                 pop(anda);
                 i++;
-                saida[i] = ' ';
-                i++;
             }
             pop(anda);
         }
@@ -252,8 +250,6 @@ void inftopos(s_pilha* pilha_aux){
                     saida[i] = get(anda);
                     pop(anda);
                     push(anda, elem_aux->caractere);                   
-                    i++;
-                    saida[i] = ' ';
                     i++;
                 }
                 else if(priori == 4){
@@ -277,16 +273,12 @@ void inftopos(s_pilha* pilha_aux){
         else{
             saida[i] = elem_aux->caractere;
             i++; 
-            saida[i] = ' ';
-            i++;
         }
         elem_aux = elem_aux->proximo;
     }
     while(!pilha_vazia(anda)){
         saida[i] = get(anda);
         pop(anda);
-        i++;
-        saida[i] = ' ';
         i++;
     }
 
