@@ -435,11 +435,12 @@ void calcmode(){
     n_pilha* calculadora = cria_pilhanumerica();
     char entrada[200];
     char k;
+    int i;
     double db, elem1, elem2, elem3;
     CLEAR;
 
-    printf("Bem vindo, caso deseje sair, basta digitar 's'\n");
-
+    printf("Bem vindo, caso deseje sair desse modo, basta digitar 's'\n");
+    entrada[0] = 'f';
     while(entrada[0] != 's'  && entrada[0] != 'S'){
         mostrar_pilha_num(calculadora);
         scanf("%s", entrada);
@@ -449,14 +450,37 @@ void calcmode(){
             push_num(calculadora, db);
         }
 
-        else if(ehoperando(entrada[0])){
-            if(calculadora->quantidade == 1){
+        else if(entrada[0] == 'c' || entrada[0] == 'C'){
+            printf("aqui");
+            elem1 = getnum(calculadora);
+            n_pop(calculadora);
+            elem2 = getnum(calculadora);
+            n_pop(calculadora);
+            for(i=0;i<elem1;i++){
+                push_num(calculadora, elem2);
+            }
+        }
+
+        else if(ehoperando(entrada[0])){ 
+            if(entrada[1] == '!'){
+                while(calculadora->quantidade != 1){
+                    elem1 = getnum(calculadora);
+                    n_pop(calculadora);
+                    elem2 = getnum(calculadora);
+                    n_pop(calculadora);
+                    elem3 = operacao(elem1, elem2, entrada[0]);
+                    push_num(calculadora, elem3);
+                }
+            }
+            
+            else if(calculadora->quantidade == 1){
                 printf("==Quantidade de operandos insuficientes!==\n");
                 do{
-                printf("Digite 'r'  para continuar.\n");
-                scanf(" %c", &k);
+                    printf("Digite 'r'  para continuar.\n");
+                    scanf(" %c", &k);
                 }while(k != 'R' && k != 'r');
             }
+
             else{
                 elem1 = getnum(calculadora);
                 n_pop(calculadora);
@@ -488,6 +512,7 @@ void tutorial(){
         printf("Digite 'r'  para retornar ao menu.\n");
         scanf(" %c", &x);
     }while(x != 'R' && x != 'r');
+    CLEAR;
 }
 /*Funcao para printar o menu*/
 void show_menu(){
@@ -503,11 +528,10 @@ void show_menu(){
 void menu(){   
     char input = '5';
 
-    while(input != '4'){   
+    while(input != '4'){  
         show_menu();   
         printf("Selecione uma opcao: ");
         scanf(" %c", &input);
-
         if(input == '1' || input == '2' || input == '3'){
             switch(input){
             case '1': resmode();
@@ -523,6 +547,8 @@ void menu(){
             CLEAR;
             printf("Por favor, digite uma opcao valida.\n");
         } 
+
+
     }
 }
 
