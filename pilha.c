@@ -194,6 +194,14 @@ void limpar_pilha(s_pilha* pilha){
     }
 }
 
+void limpar_pilha_num(n_pilha* pilha){
+    while(pilha->inicio != NULL){
+        n_pop(pilha);
+    }
+    if(n_pilha_vazia(pilha)){
+        free(pilha);
+    }
+}
 /*Função para printar todos os itens da pilha*/
 void mostrar_pilha(s_pilha* pilha){
     if(pilha_vazia(pilha)){

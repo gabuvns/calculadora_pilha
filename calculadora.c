@@ -240,7 +240,9 @@ void inftopos(s_pilha* simbolos, char* calculo_final){
             i++;
 
         }
+
         else if(elem_aux->caractere == (')')){
+            
             while(!pilha_vazia(anda)){
                 if(get(anda) != '('){
                     printf("%c ", get(anda));
@@ -270,6 +272,7 @@ void inftopos(s_pilha* simbolos, char* calculo_final){
             }
 
            else if(prioridade(elem_aux->caractere, get(anda)) == 2){
+               
                 tt = get(anda);
                 if(tt != '('){
                     while(!pilha_vazia(anda) && prioridade(elem_aux->caractere, get(anda)) == 2){
@@ -281,11 +284,12 @@ void inftopos(s_pilha* simbolos, char* calculo_final){
                         i++;
                         pop(anda);
 
-
                     }
                     push(anda, elem_aux->caractere);
-
-               }
+                }
+                else{
+                    push(anda, elem_aux->caractere);
+                }
             
             }
             elem_aux = elem_aux->proximo;
@@ -308,7 +312,7 @@ void inftopos(s_pilha* simbolos, char* calculo_final){
         scanf(" %c", &z);
 
     }while(z != 'R' && z!= 'r');
- 
+ CLEAR;
 }
 /*Fim da terceira etapa*/
 /*Início da terceira etapa*/
@@ -331,17 +335,20 @@ double operacao(double elem1, double elem2, char operando){
         n = elem2 / elem1;
         return n;
     }
+    else{
+        return 1;
+    }
 }
 void calcula_expressao(char* calculo_final){
     n_pilha* calcular = cria_pilhanumerica();
     double db;
     char entry[21];
     double elem1, elem2, elem3;
-    int i, j, flag;
+    int i, j;
 
     while(calculo_final[i] != '\0'){
         j = 0;
-        flag = 0;
+
         if(ehnumero(calculo_final[i])){
             while(ehnumero(calculo_final[i])){
                 entry[j] = calculo_final[i];
@@ -368,13 +375,14 @@ void calcula_expressao(char* calculo_final){
             i++;
         }
     }
-    printf("Resultado da operacao = %lf\n", getnum(calcular));
+    printf("Resultado da operacao = %.3lf\n", getnum(calcular));
     char y;
     do{
         printf("Digite 'r'  para retornar ao menu.\n");
         scanf(" %c", &y);
 
     }while(y != 'R' && y != 'r');
+    limpar_pilha_num(calcular);
 }
 
 /*Fim calcula expressao*/
@@ -433,7 +441,7 @@ void tutorial(){
     CLEAR;
     char x;
     printf("Basta selecionar um modo digitando a opcao desejada.\n");
-    printf("No modo de Resolucao de Expressao, sugere-se fortemente");
+    printf("No modo de Resolucao de Expressao, eh necessaria ");
     printf("a adicao de '.00' caso seja um numero inteiro, como a seguir:\n");
     printf("(60.00 + 35.5234)* 45.00 - 35.00\n");
     printf("Para mais informacoes consulte o readme\n");
