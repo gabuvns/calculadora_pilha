@@ -8,7 +8,7 @@
 #else
     #define CLEAR system("clear")
 #endif
-
+void menu();
 int main(){
     CLEAR;
     printf("==Bem vindo a calculadora de expressoes==\n");
