@@ -506,8 +506,14 @@ void tutorial(){
     printf("a adicao de '.00' caso seja um numero inteiro, como a seguir:\n");
     printf("(60.00 + 35.5234)* 45.00 - 35.00\n\n");
     printf("2) No modo calculadora, basta digitar 's' para sair.\n\n");
-    printf("Para mais informacoes consulte o readme\n");
-    printf("Pressione qualquer tecla para retornar ao menu.\n");
+    printf("Alem das operacoes aritmeticas simples (+,-,*,/)\n");
+    printf("existe tambe a opcao 'c', que copia ");
+    printf("o elemento anterior ao topo  N vezes o número do elemento que esta no topo.\n");
+    printf("E a opcao de inserir um '!' apos a operacao, neste caso ");
+    printf("esta operacao vai ser repetida ate que a pilha possua um unico elemento.\n\n");
+
+    printf("Para mais informacoes consulte o readme.\n");
+
     do{
         printf("Digite 'r'  para retornar ao menu.\n");
         scanf(" %c", &x);
