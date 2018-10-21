@@ -192,6 +192,9 @@ int prioridade(char caractere, char topo){
     if(vtopo < vcarac){
         return 1;
     }
+    else if(vtopo == vcarac){
+        return 2;
+    }
     else {
         return 2;
     }
@@ -225,7 +228,7 @@ void inftopos(s_pilha* simbolos, char* calculo_final){
             i++;
 
             db = chpdb(ch);
-            printf("%.4lf ", db);
+            printf("%.2lf ", db);
 
         }
 
@@ -254,7 +257,7 @@ void inftopos(s_pilha* simbolos, char* calculo_final){
 
         }
         
-        else{
+       else{
 
             if(pilha_vazia(anda)){
                 push(anda, elem_aux->caractere);
@@ -267,21 +270,25 @@ void inftopos(s_pilha* simbolos, char* calculo_final){
             }
 
            else if(prioridade(elem_aux->caractere, get(anda)) == 2){
-               tt = get(anda);
-               if(tt != '('){
-                   printf("%c ", tt);
-                    calculo_final[i] = tt;
-                    i++;
-                    calculo_final[i] = ' ';
-                    i++;
+                tt = get(anda);
+                if(tt != '('){
+                    while(!pilha_vazia(anda) && prioridade(elem_aux->caractere, get(anda)) == 2){
+                        tt = get(anda);
+                        printf("%c ", tt);
+                        calculo_final[i] = tt;
+                        i++;
+                        calculo_final[i] = ' ';
+                        i++;
+                        pop(anda);
+
+
+                    }
+                    push(anda, elem_aux->caractere);
 
                }
-               
-               pop(anda);
-               push(anda, elem_aux->caractere);
-
+            
             }
-        elem_aux = elem_aux->proximo;
+            elem_aux = elem_aux->proximo;
 
         }
     }
@@ -295,36 +302,79 @@ void inftopos(s_pilha* simbolos, char* calculo_final){
     }
     calculo_final[i] = '\0';
     limpar_pilha(anda);
-    int ap;
-    scanf("%d", &ap);
+    char z;
+    do{
+        printf("\nDigite 'r' para a proxima etapa.\n");
+        scanf(" %c", &z);
+
+    }while(z != 'R' && z!= 'r');
  
 }
 /*Fim da terceira etapa*/
 /*Início da terceira etapa*/
-
+double operacao(double elem1, double elem2, char operando){
+    float n;
+    if(operando == '+'){
+        n = elem1 + elem2;
+        return n;
+    }
+    else if(operando == '-'){
+        n = elem2 - elem1;
+        return n;
+        
+    }
+    else if(operando == '*'){
+        n = elem1 * elem2;
+        return n;
+    }
+    else if(operando == '/'){
+        n = elem2 / elem1;
+        return n;
+    }
+}
 void calcula_expressao(char* calculo_final){
     n_pilha* calcular = cria_pilhanumerica();
     double db;
     char entry[21];
-    int i, j;
+    double elem1, elem2, elem3;
+    int i, j, flag;
 
-    while(calculo_final [i] != '\0'){
+    while(calculo_final[i] != '\0'){
         j = 0;
+        flag = 0;
         if(ehnumero(calculo_final[i])){
             while(ehnumero(calculo_final[i])){
                 entry[j] = calculo_final[i];
                 j++;
                 i++;
+
             }
             db = chpdb(entry);  
             push_num(calcular, db);
+
         }
         else if(ehoperando(calculo_final[i])){
-            
-            i++;
-        }   
+            elem1 = getnum(calcular);
+            n_pop(calcular);
+            elem2 = getnum(calcular);
+            n_pop(calcular);
+            elem3 = operacao(elem1, elem2, calculo_final[i]);
+            push_num(calcular, elem3);
+            i++;  
+
+        }
         
+        else if (calculo_final[i]){
+            i++;
+        }
     }
+    printf("Resultado da operacao = %lf\n", getnum(calcular));
+    char y;
+    do{
+        printf("Digite 'r'  para retornar ao menu.\n");
+        scanf(" %c", &y);
+
+    }while(y != 'R' && y != 'r');
 }
 
 /*Fim calcula expressao*/
@@ -345,12 +395,12 @@ void resmode(){
 
     if(!validade(expressao)){
         printf("Expressao invalida, reformule-a e tente novamente.\n");
-        limpar_pilha(simbolos);
         do{
             printf("Digite 'r'  para retornar ao menu.\n");
             scanf(" %c", &con);
+
         }while(con != 'R' && con != 'r');
-        CLEAR;
+
     }
 
     else{
@@ -361,10 +411,11 @@ void resmode(){
         }while(con != 'R' && con != 'r');
         CLEAR;
         inftopos(simbolos, calculo_final);
-    }
-    calcula_expressao(calculo_final);
-    limpar_pilha(simbolos);
+        calcula_expressao(calculo_final);
 
+    }
+    limpar_pilha(simbolos);
+    CLEAR;
 }
 
 /*Fim do modo de resolucao*/
@@ -380,17 +431,17 @@ void resmode(){
 /*Configuracoes referentes ao menu*/
 void tutorial(){
     CLEAR;
-    char con;
+    char x;
     printf("Basta selecionar um modo digitando a opcao desejada.\n");
     printf("No modo de Resolucao de Expressao, sugere-se fortemente");
-    printf("a adicao de '.0' caso seja um numero inteiro, como a seguir:\n");
-    printf("(60.0 + 35.5234)* 45.0 - 35.0\n");
+    printf("a adicao de '.00' caso seja um numero inteiro, como a seguir:\n");
+    printf("(60.00 + 35.5234)* 45.00 - 35.00\n");
     printf("Para mais informacoes consulte o readme\n");
     printf("Pressione qualquer tecla para retornar ao menu.\n");
     do{
         printf("Digite 'r'  para retornar ao menu.\n");
-        scanf(" %c", &con);
-    }while(con != 'R' && con != 'r');
+        scanf(" %c", &x);
+    }while(x != 'R' && x != 'r');
 }
 /*Funcao para printar o menu*/
 void show_menu(){
