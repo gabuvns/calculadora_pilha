@@ -71,6 +71,34 @@ void pop(s_pilha* pilha){
     }
 }
 
+void n_pop(n_pilha* pilha){
+    if(n_pilha_vazia(pilha)){
+        printf("Nao existem elementos para retirar da pilha!\n");
+    }
+
+    else if(pilha->quantidade == 1){
+        free(pilha->inicio);
+        pilha->inicio = NULL;
+        pilha->topo = NULL;
+        pilha->quantidade--;
+    }
+
+    else{
+        s_numerical* elem_atual = pilha->inicio;
+        s_numerical* elem_ant;
+
+        while(elem_atual->proximo != NULL){
+
+            elem_ant = elem_atual;
+            elem_atual = elem_atual->proximo;
+        }
+
+        free(elem_atual);
+        elem_ant->proximo = NULL;
+        pilha->topo = elem_ant;
+        pilha->quantidade--;
+    }
+}
 /*Adiciona novos elementos à pilha*/
 void push(s_pilha* pilha, char input){
     if(pilha->inicio == NULL){
@@ -120,6 +148,14 @@ int pilha_vazia(s_pilha* pilha){
     }
 }
 
+int n_pilha_vazia(n_pilha* pilha){
+    if(pilha->inicio == NULL){
+        return 1;
+    }
+    else{
+        return 0;
+    }
+}
 /*Função que printa somente o último elemento da pilha*/
 char get(s_pilha* pilha){
     if(pilha_vazia(pilha)){
@@ -131,6 +167,20 @@ char get(s_pilha* pilha){
             elem_aux2 = elem_aux2->proximo;
         }
         return elem_aux2->caractere;
+
+    }
+}
+
+float getnum(n_pilha* pilha){
+    if(n_pilha_vazia(pilha)){
+        printf("A pilha encontra-se vazia!\n");
+    }
+    else{
+        s_numerical* elem_aux2 = pilha->inicio;
+        while(elem_aux2->proximo != NULL){
+            elem_aux2 = elem_aux2->proximo;
+        }
+        return elem_aux2->numero;
 
     }
 }

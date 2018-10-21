@@ -65,5 +65,8 @@ void mostrar_pilha(s_pilha* pilha);
 n_pilha* cria_pilhanumerica();
 s_numerical* cria_elementonumerico(float input);
 void push_num(n_pilha* numerical, float input);
+int n_pilha_vazia(n_pilha* pilha);
+float getnum(n_pilha* pilha);
+void n_pop(n_pilha* pilha);
 
 #endif
