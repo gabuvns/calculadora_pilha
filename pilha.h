@@ -68,5 +68,7 @@ void push_num(n_pilha* numerical, float input);
 int n_pilha_vazia(n_pilha* pilha);
 float getnum(n_pilha* pilha);
 void n_pop(n_pilha* pilha);
+void limpar_pilha_num(n_pilha* pilha);
+void mostrar_pilha_num(n_pilha* pilha);
 
 #endif

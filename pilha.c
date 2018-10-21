@@ -223,4 +223,25 @@ void mostrar_pilha(s_pilha* pilha){
     }
 }
 
+/*Função para printar todos os itens da pilha numerica*/
+void mostrar_pilha_num(n_pilha* pilha){
+    if(n_pilha_vazia(pilha)){
+        printf("A pilha está vazia!\n");
+    }
+    
+    else{
+        s_numerical* elem_aux = pilha->inicio;
+        int i;
+        i = pilha->quantidade + 1;
+        printf("==========Pilha==========\n");
+        while(elem_aux != NULL){ 
+            i--;
+            printf("%d. %lf\n", i, elem_aux->numero);
+            elem_aux = elem_aux->proximo;
+        }
+        printf("======Fim da Pilha=======\n\n\n");
+        free(elem_aux);
+    }
+}
+
 
